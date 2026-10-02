@@ -20,6 +20,34 @@ html[data-theme=dark] body{color-scheme:dark;--bg:#181b23;--ink:#f0eee9;--muted:
 
 .hero-art{overflow:clip;overflow-clip-margin:12px}.hero .kinetic-line:last-child .kinetic-char:last-child{color:var(--accent)}
 @media(max-width:350px){.hero-art{overflow-clip-margin:0}}
+/* Mobile collision fixes only; desktop layout is unchanged. */
+@media(max-width:760px){
+ header{position:sticky;top:10px;z-index:20}
+ .head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 6px;padding:10px 12px}
+ .brand{min-width:0;white-space:nowrap;grid-column:1;grid-row:1}
+ .controls{grid-column:2;grid-row:1;display:grid;grid-template-columns:auto auto;gap:5px;align-items:center}
+ .motion-control{position:static;grid-column:1 / -1;grid-row:2;justify-self:end;margin-top:3px}
+ nav{position:static;grid-column:1 / -1;grid-row:2;margin-top:4px;max-height:none;box-shadow:none}
+ .hero-art{display:flex;flex-direction:column;gap:22px;min-height:0;padding:18px 0;margin-top:15px;overflow:clip;overflow-clip-margin:0;translate:none!important}
+ .hero h1{translate:none!important}
+ .hero-art .portrait{flex-shrink:0;order:2}
+ .floating{position:relative;inset:auto!important;max-width:calc(100% - 20px);flex-shrink:0}
+ .float-a{order:1;align-self:flex-end;margin-right:10px}
+ .float-b{order:3;align-self:flex-start;margin-left:10px}
+ .orbit{top:50%;left:50%;margin-top:-155px;margin-left:-155px;pointer-events:none}
+ .hero-art .portrait figcaption{max-width:calc(100% - 20px);white-space:normal;text-align:center}
+ .fact svg,.stack-heading svg{flex-shrink:0}
+ .project,.repo-tile,.resume-grid>*,.skill-grid>*,.about-grid>*{min-width:0}
+ .contact .email{overflow-wrap:anywhere}
+ html{scroll-padding-top:140px}
+}
+@media(max-width:350px){.orbit{margin-top:-140px;margin-left:-140px}.brand{font-size:18px}}
+.profile-modal{width:min(460px,calc(100% - 28px));max-height:88dvh;padding:22px;border-radius:28px;text-align:center;overflow:auto}.profile-close{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--solid);z-index:1;font-size:22px}.profile-large{display:block;width:100%;height:min(38dvh,340px);object-fit:cover;object-position:50% 25%;border-radius:19px;margin-bottom:20px}.profile-modal h2{font-size:clamp(26px,7vw,36px);overflow-wrap:anywhere;margin:12px 0}.profile-modal>p{font-size:13px;color:var(--muted)}.profile-summary{margin-top:15px;line-height:1.7}.portrait[role=button],.hero .name strong[role=button]{cursor:pointer}.portrait[role=button]:focus-visible{outline:3px solid var(--accent);outline-offset:5px}.motion-ticker{max-width:60%;overflow:hidden;white-space:nowrap;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}.ticker-track{display:flex;width:max-content;gap:32px;animation:technicalTicker 15s linear infinite}.ticker-track>span{flex-shrink:0}.ambient{animation:ambientDrift 14s ease-in-out infinite alternate;transform-origin:50% 20%}.motion-off .ticker-track{animation:none!important;transform:none!important}.motion-off .ticker-track>span+span{display:none}.motion-off .button{translate:none!important}.motion-off .art svg{translate:none!important}.motion-off .ambient{animation:none!important}.art svg,.oss-art svg{transition:translate .12s}.button{transition:translate .15s}.skill[aria-pressed=true]{animation:skillGlow 2.8s ease-in-out infinite}.scene-entered .eyebrow{animation:labelFlash 1.2s ease-out}.hero h1{animation:headlineSettle 1.6s cubic-bezier(.16,1,.3,1)}@keyframes technicalTicker{to{transform:translateX(calc(-50% - 16px))}}@keyframes ambientDrift{to{transform:translate3d(2%,-1%,0) scale(1.05)}}@keyframes skillGlow{50%{box-shadow:0 0 0 4px #8475b819}}@keyframes labelFlash{from{letter-spacing:.26em;opacity:.3}to{letter-spacing:.16em;opacity:1}}@keyframes headlineSettle{from{transform:translateY(14px)}to{transform:none}}@media(prefers-reduced-motion:reduce){.ticker-track,.ambient,.skill,.hero h1{animation:none!important}.ticker-track>span+span{display:none}}@media(max-width:760px){.ambient{animation-duration:20s}.profile-modal{padding:18px}.motion-ticker{max-width:58%}.ticker-track{animation-duration:18s}}
+/* Laptop navigation is flush to the viewport edge. Mobile controls stay in flow. */
+@media(min-width:761px){header{position:fixed;top:0;left:50%;translate:-50% 0;margin:0;width:100%;border-radius:0 0 18px 18px}.head{max-width:1232px;margin:0 auto}main{padding-top:80px}.motion-off header{translate:-50% 0!important}}
+@media(max-width:760px){header{position:relative;top:auto}html{scroll-padding-top:24px}}
+/* Keep the contact headline's font and size; give adjacent glyphs and lines room. */
+.contact h2{letter-spacing:-.015em;line-height:1.18}
 </style><!-- Font licenses: Geist and Absans
 Copyright 2024 The Geist Project Authors (https://github.com/vercel/geist-font)
 
@@ -248,4 +276,19 @@ const cgpa=$('.fact p');if(cgpa){cgpa.innerHTML=cgpa.innerHTML.replace('8.16','<
 const interactive=$$('.project,.repo-tile,.button');if(matchMedia('(hover: hover) and (pointer: fine)').matches){interactive.forEach(el=>{let frame=0,x=0,y=0;el.addEventListener('pointermove',e=>{if(!motionOn)return;const r=el.getBoundingClientRect();x=(e.clientX-r.left)/r.width-.5;y=(e.clientY-r.top)/r.height-.5;if(!frame)frame=requestAnimationFrame(()=>{el.style.transform='perspective(850px) rotateX('+(-y*5)+'deg) rotateY('+(x*6)+'deg) translateY(-5px)';frame=0;});});el.addEventListener('pointerleave',()=>{cancelAnimationFrame(frame);frame=0;const from=el.style.transform||'none';el.style.transform='';if(motionOn)el.animate([{transform:from},{transform:'translateY(3px) scale(.995)',offset:.55},{transform:'none'}],{duration:650,easing:'cubic-bezier(.2,.8,.2,1)'});});});}
 // One rAF per scroll event; no permanent JS animation loop or scroll hijacking.
 let motionFrame=0;function motionScroll(){motionFrame=0;if(!motionOn)return;const hero=$('.hero');const r=hero.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight){const offset=Math.max(-1,Math.min(1,-r.top/innerHeight));$('.hero-art').style.translate='0 '+(offset*45)+'px';$('.hero h1').style.translate='0 '+(offset*-18)+'px';}const current=Array.from($$('section[id]')).find(s=>{const r=s.getBoundingClientRect();return r.top<innerHeight*.65&&r.bottom>innerHeight*.4;});motionRoot.dataset.scene=current?.id||'intro';}addEventListener('scroll',()=>{if(!motionFrame)motionFrame=requestAnimationFrame(motionScroll);},{passive:true});
+// Extra motion stays off when paused or reduced motion is requested.
+const profileModal=document.createElement('dialog');profileModal.className='profile-modal';profileModal.setAttribute('aria-label','Kesavamoorthi G profile');
+profileModal.innerHTML='<button type="button" class="profile-close" aria-label="Close profile">×</button><img class="profile-large" alt="Kesavamoorthi G wearing a blazer"><p class="eyebrow">BACKEND ENGINEER</p><h2>Kesavamoorthi G</h2><p>Chennai, India</p><p class="profile-summary">'+$('.hero .copy').textContent+'</p>';
+profileModal.querySelector('img').src=$('.real-portrait').src;motionRoot.append(profileModal);let profileTrigger;
+function openProfile(e){profileTrigger=e.currentTarget;profileModal.showModal();document.body.style.overflow='hidden';if(motionOn)profileModal.animate([{opacity:0,transform:'translateY(70px) scale(.76) rotate(-4deg)'},{opacity:1,transform:'translateY(-9px) scale(1.02) rotate(.5deg)',offset:.8},{opacity:1,transform:'none'}],{duration:750,easing:'cubic-bezier(.2,.8,.2,1)'});}
+$$('.portrait,.hero .name strong').forEach(el=>{el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label','Open Kesavamoorthi profile');el.addEventListener('click',openProfile);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openProfile(e);}});});
+profileModal.querySelector('.profile-close').onclick=()=>profileModal.close();profileModal.addEventListener('click',e=>{if(e.target===profileModal){const r=profileModal.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)profileModal.close();}});profileModal.addEventListener('close',()=>{document.body.style.overflow='';profileTrigger?.focus();});
+const entryObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;entryObserver.unobserve(el);if(!motionOn)return;const peers=Array.from(el.parentElement.children);const idx=Math.min(peers.indexOf(el),4);el.animate([{opacity:0,transform:'translateY(55px) scale(.93) rotate(1.8deg)',clipPath:'inset(10% 0 0 0 round 25px)'},{opacity:1,transform:'translateY(-6px) scale(1.012) rotate(-.3deg)',clipPath:'inset(0 0 0 0 round 25px)',offset:.78},{opacity:1,transform:'none',clipPath:'inset(0 0 0 0 round 25px)'}],{duration:950,delay:idx*70,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});}),{threshold:.12});$$('.project,.repo-tile,.experience-card,.achievement-card,.credentials,.stack,.process,.about-main,.fact,.oss').forEach(el=>entryObserver.observe(el));
+// Turn the existing technical line into a visual ticker, without adding claims.
+const ticker=$('.hero-foot>span:first-child')||$('.hero-foot>p:first-child');if(ticker){const text=ticker.textContent;ticker.classList.add('motion-ticker');ticker.setAttribute('aria-label',text);ticker.innerHTML='<span class="ticker-track" aria-hidden="true"><span>'+text+'</span><span>'+text+'</span></span>';}
+// Touch has a tap response; magnetic tracking is reserved for real hover devices.
+$$('.button,.skill,.filter,.case').forEach(el=>el.addEventListener('pointerdown',()=>{if(motionOn)el.animate([{transform:'scale(1)'},{transform:'scale(.94)',offset:.35},{transform:'scale(1.035)',offset:.72},{transform:'scale(1)'}],{duration:450,easing:'cubic-bezier(.2,.8,.2,1)'});}));
+if(matchMedia('(hover: hover) and (pointer: fine)').matches){$$('.button').forEach(el=>{el.addEventListener('pointermove',e=>{if(!motionOn)return;const r=el.getBoundingClientRect();el.style.translate=((e.clientX-r.left-r.width/2)*.13)+'px '+((e.clientY-r.top-r.height/2)*.2)+'px';});el.addEventListener('pointerleave',()=>{el.style.translate='none';});});}
+const depthTargets=Array.from($$('.project .art,.oss-art'));let depthFrame=0;function depthScroll(){depthFrame=0;if(!motionOn)return;depthTargets.forEach(el=>{const r=el.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight){const v=(r.top+r.height/2-innerHeight/2)/innerHeight;const svg=el.querySelector('svg');if(svg)svg.style.translate='0 '+Math.max(-14,Math.min(14,v*24))+'px';}});}
+addEventListener('scroll',()=>{if(!depthFrame)depthFrame=requestAnimationFrame(depthScroll);},{passive:true});
 </script></body></html>
